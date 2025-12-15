@@ -57,6 +57,28 @@ a-scene {
   color: #fbbf24;
 }
 
+.retry-button {
+  margin-top: 15px;
+  padding: 10px 20px;
+  background: #3b82f6;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.9em;
+  font-weight: 500;
+  cursor: pointer;
+  font-family: 'Inter', sans-serif;
+  transition: background 0.2s ease;
+}
+
+.retry-button:hover {
+  background: #2563eb;
+}
+
+.retry-button.hide {
+  display: none;
+}
+
 /* Loading indicator */
 #loading {
   position: absolute;
