@@ -4,31 +4,67 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Mobile AR App</title>
+    <title>AR Image Marker App</title>
     <!-- Add Google Fonts for Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/style.css">
+    <!-- Load A-Frame in head BEFORE the scene (required by A-Frame) -->
+    <script src="https://aframe.io/releases/1.6.0/aframe.min.js"></script>
   </head>
   <body>
-    <script type="module" src="/main.js"></script>
-    
-    <model-viewer
-      src="https://modelviewer.dev/shared-assets/models/Astronaut.glb"
-      ios-src="https://modelviewer.dev/shared-assets/models/Astronaut.usdz"
-      alt="A 3D model of an astronaut"
-      ar
-      ar-modes="webxr scene-viewer quick-look"
-      camera-controls
-      auto-rotate
-      shadow-intensity="1"
-      environment-image="neutral"
+    <!-- Instructions overlay -->
+    <div id="info">
+      <h2>AR Image Marker</h2>
+      <p>Point your camera at the marker image</p>
+      <p id="status">Initializing camera...</p>
+      <button id="retry-btn" class="retry-button hide" onclick="window.location.reload()">Retry Camera</button>
+    </div>
+
+    <!-- Loading indicator -->
+    <div id="loading">
+      <div class="spinner"></div>
+      <p>Loading AR...</p>
+    </div>
+
+    <!-- A-Frame Scene with MindAR -->
+    <a-scene 
+      mindar-image="imageTargetSrc: /markers/targets.mind; autoStart: true; uiError: true; uiLoading: no;"
+      color-space="sRGB"
+      embedded
+      renderer="colorManagement: true, physicallyCorrectLights"
+      vr-mode-ui="enabled: false"
+      device-orientation-permission-ui="enabled: false"
     >
-      <button slot="ar-button" id="ar-button">
-        View in your space
-      </button>
-      
-      <div id="error" class="hide">AR is not supported on this device</div>
-    </model-viewer>
+      <a-assets>
+        <a-asset-item id="astronaut" src="https://modelviewer.dev/shared-assets/models/Astronaut.glb"></a-asset-item>
+      </a-assets>
+
+      <a-camera 
+        position="0 0 0" 
+        look-controls="enabled: false"
+        wasd-controls="enabled: false"
+      ></a-camera>
+
+      <!-- AR Target - Object appears when marker is detected -->
+      <a-entity mindar-image-target="targetIndex: 0">
+        <!-- Astronaut model standing on marker -->
+        <a-gltf-model 
+          src="#astronaut"
+          position="0 0 0"
+          rotation="0 0 0"
+          scale="0.3 0.3 0.3"
+          animation__scale="property: scale; to: 0.5 0.5 0.5; dur: 2000; easing: easeOutElastic; startEvents: targetFound"
+          animation__rotate="property: rotation; to: 0 360 0; dur: 3000; loop: true; startEvents: targetFound"
+          id="astronaut-model"
+        ></a-gltf-model>
+      </a-entity>
+    </a-scene>
+
+    <!-- MindAR A-Frame Component (includes everything needed, loads after A-Frame) -->
+    <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
+    <!-- Load our custom handlers -->
+    <script type="module" src="/main.js"></script>
   </body>
 </html>

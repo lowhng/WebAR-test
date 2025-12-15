@@ -1,7 +1,3 @@
-:not(:defined) > * {
-  display: none;
-}
-
 body {
   margin: 0;
   padding: 0;
@@ -12,44 +8,115 @@ body {
   font-family: 'Inter', sans-serif;
 }
 
-model-viewer {
+/* Hide A-Frame scene until ready */
+a-scene {
   width: 100%;
   height: 100%;
-  background-color: #171717;
-  --poster-color: #171717;
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 
-#ar-button {
-  background-image: url(https://modelviewer.dev/assets/ic_view_in_ar_new_googblue_48dp.png);
-  background-repeat: no-repeat;
-  background-size: 20px 20px;
-  background-position: 12px 50%;
-  background-color: #fff;
+/* Instructions overlay */
+#info {
   position: absolute;
+  top: 20px;
   left: 50%;
   transform: translateX(-50%);
-  bottom: 25px;
-  white-space: nowrap;
-  padding: 0px 16px 0px 40px;
-  font-family: Roboto, Regular, Helvetica Neue, sans-serif;
-  font-size: 14px;
-  color: #4285f4;
-  height: 36px;
-  line-height: 36px;
-  border-radius: 18px;
-  border: 1px solid #DADCE0;
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 20px 30px;
+  border-radius: 12px;
+  z-index: 1000;
+  text-align: center;
+  font-family: 'Inter', sans-serif;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: opacity 0.3s ease;
 }
 
-#ar-button:active {
-  background-color: #E8EAED;
+#info.hide {
+  opacity: 0;
+  pointer-events: none;
 }
 
-#ar-button:focus {
-  outline: none;
+#info h2 {
+  margin: 0 0 10px 0;
+  font-size: 1.5em;
+  font-weight: 600;
 }
 
-#ar-button:focus-visible {
-  outline: 1px solid #4285f4;
+#info p {
+  margin: 5px 0;
+  font-size: 0.9em;
+}
+
+#status {
+  margin-top: 10px;
+  font-weight: 500;
+  color: #fbbf24;
+}
+
+.retry-button {
+  margin-top: 15px;
+  padding: 10px 20px;
+  background: #3b82f6;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.9em;
+  font-weight: 500;
+  cursor: pointer;
+  font-family: 'Inter', sans-serif;
+  transition: background 0.2s ease;
+}
+
+.retry-button:hover {
+  background: #2563eb;
+}
+
+.retry-button.hide {
+  display: none;
+}
+
+/* Loading indicator */
+#loading {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1001;
+  text-align: center;
+  color: white;
+  font-family: 'Inter', sans-serif;
+}
+
+#loading.hide {
+  display: none;
+}
+
+.spinner {
+  border: 4px solid rgba(255, 255, 255, 0.3);
+  border-top: 4px solid white;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+  margin: 0 auto 15px;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Clickable elements */
+.clickable {
+  cursor: pointer;
+}
+
+.clickable:hover {
+  opacity: 0.8;
 }
 
 @media (prefers-color-scheme: dark) {
